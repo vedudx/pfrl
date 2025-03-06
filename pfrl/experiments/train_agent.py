@@ -36,6 +36,7 @@ def train_agent(
     step_hooks=(),
     eval_during_episode=False,
     logger=None,
+    wandb_logging=True
 ):
     logger = logger or logging.getLogger(__name__)
 
@@ -110,6 +111,11 @@ def train_agent(
                     if not file_exists:
                         writer.writeheader()
                     writer.writerow({'episode': episode_idx, 'reward': episode_r})
+                    if wandb_logging:
+                        import wandb
+                        # wandb.log({"sps": episode_len / (time.time() - start)})
+                        wandb.log({'episode': episode_idx, 'reward': episode_r})
+
                 
                 episode_r = 0
                 episode_len = 0
